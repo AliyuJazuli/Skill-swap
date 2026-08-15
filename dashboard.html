@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkillSwap | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="navbar container">
+        <a href="index.html" class="logo">SkillSwap</a>
+
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="browse.html">Browse Skills</a></li>
+          
+          <li><a href="saved-skills.html">Saved Skills</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="login.html" data-auth="login">Login</a></li>
+          <li><a href="signup.html" data-auth="signup">Sign Up</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <button class="theme-toggle" type="button" aria-label="Toggle color theme">
+            <span class="theme-toggle__icon">☀️</span>
+          </button>
+          <a href="profile.html" class="btn btn-sm">Profile</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container page-shell">
+      <section class="page-hero">
+        <p class="eyebrow">Your learning hub</p>
+        <h1>Welcome back to your personalised dashboard.</h1>
+        <p>Track your learning streak, saved skills, and recent activity in one place.</p>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="dashboard-card hero-panel">
+          <div id="dashboard-profile"></div>
+          <div class="dashboard-actions">
+            <a href="profile.html" class="btn">Edit profile</a>
+            <a href="browse.html" class="btn btn-secondary">Continue learning</a>
+            <a href="swap.html" class="btn btn-secondary">Find a swap</a>
+            <button class="btn btn-secondary" id="logout-btn" type="button">Logout</button>
+          </div>
+        </article>
+
+        <article class="dashboard-card">
+          <h3>Learning progress</h3>
+          <div id="progress-overview"></div>
+        </article>
+
+        <article class="dashboard-card">
+          <h3>Saved skills</h3>
+          <div id="saved-skills-list"></div>
+        </article>
+
+        <article class="dashboard-card">
+          <h3>Completed lessons</h3>
+          <div id="completed-lessons-list"></div>
+        </article>
+
+        <article class="dashboard-card">
+          <h3>Recently viewed</h3>
+          <div id="recent-skills-list"></div>
+        </article>
+
+        <article class="dashboard-card">
+          <h3>New features unlocked</h3>
+          <div id="dashboard-stats"></div>
+          <div id="dashboard-recommendations"></div>
+        </article>
+
+        <article class="dashboard-card wide-card">
+          <h3>Your skill swaps</h3>
+          <div id="dashboard-swaps"></div>
+        </article>
+
+        <article class="dashboard-card">
+          <h3>Communities & study groups</h3>
+          <div id="dashboard-communities"></div>
+        </article>
+
+        <article class="dashboard-card">
+          <h3>Certificates & mentor path</h3>
+          <div id="dashboard-certificates"></div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <p>© 2026 SkillSwap. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="browse.html">Browse</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>

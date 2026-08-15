@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkillSwap | Browse Skills</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="navbar container">
+        <a href="index.html" class="logo">SkillSwap</a>
+
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="browse.html" class="active">Browse Skills</a></li>
+          <li><a href="saved-skills.html">Saved Skills</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="login.html" data-auth="login">Login</a></li>
+          <li><a href="signup.html" data-auth="signup">Sign Up</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <button class="theme-toggle" type="button" aria-label="Toggle color theme">
+            <span class="theme-toggle__icon">☀️</span>
+          </button>
+          <a href="contact.html" class="btn btn-sm">Join Now</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container page-shell">
+      <section class="page-hero">
+        <p class="eyebrow">Find your next skill</p>
+        <h1>Browse the skills your campus community is sharing.</h1>
+        <p>
+          Search peer-led topics, discover new interests, and connect with students who can help you grow.
+        </p>
+      </section>
+
+      <section class="search-panel">
+        <div class="search-controls">
+          <input type="search" class="skill-search" placeholder="Search skills like HTML, AI automation, design, photography..." />
+          <a href="swap.html" class="btn">Start a skill swap</a>
+        </div>
+
+        <div class="tag-row" role="list">
+          <button class="tag filter-tag active" type="button" data-filter="all">All</button>
+          <button class="tag filter-tag" type="button" data-filter="Design">Design</button>
+          <button class="tag filter-tag" type="button" data-filter="Development">Development</button>
+          <button class="tag filter-tag" type="button" data-filter="Photography">Photography</button>
+        </div>
+      </section>
+
+      <section class="skills-grid browse-grid" id="skills-grid"></section>
+
+      <section class="learning-panel" aria-live="polite">
+        <div class="learning-panel__content">
+          <h3>Learning path</h3>
+          <p>Select a skill to see a short, actionable path for learning it.</p>
+        </div>
+        <div class="mentor-panel">
+          <h3>Mentor community</h3>
+          <p>Find mentors, join study groups, and request support from peers.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <p>© 2026 SkillSwap. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="browse.html">Browse</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>

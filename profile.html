@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkillSwap | Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="navbar container">
+        <a href="index.html" class="logo">SkillSwap</a>
+        <div class="nav-actions">
+          <button class="theme-toggle" type="button" aria-label="Toggle color theme">
+            <span class="theme-toggle__icon">☀️</span>
+          </button>
+          <a href="dashboard.html" class="btn btn-sm">Dashboard</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container page-shell">
+      <section class="page-hero">
+        <p class="eyebrow">Profile settings</p>
+        <h1>Keep your learning profile up to date.</h1>
+      </section>
+
+      <section class="auth-card profile-card">
+        <form class="contact-form" id="profile-form">
+          <div class="profile-photo-row">
+            <img id="profile-photo-preview" class="profile-photo" alt="Your profile preview" />
+            <label>Profile picture<input type="file" id="profile-photo-input" accept="image/png,image/jpeg,image/webp" /></label>
+          </div>
+          <label>
+            Full name
+            <input type="text" name="name" required />
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" required />
+          </label>
+          <label>
+            Bio
+            <textarea name="bio" rows="4"></textarea>
+          </label>
+          <label>
+            I want to learn
+            <input type="text" name="learnGoals" placeholder="e.g. JavaScript, photography" />
+          </label>
+          <label>
+            I can teach
+            <input type="text" name="teachGoals" placeholder="e.g. HTML, public speaking" />
+          </label>
+          <button class="btn" type="submit">Save profile</button>
+          <p class="form-status" id="profile-status" role="status" aria-live="polite"></p>
+        </form>
+        <button class="btn btn-secondary" id="logout-btn" type="button">Logout</button>
+      </section>
+    </main>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>

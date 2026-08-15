@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkillSwap | Skill Detail</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="navbar container">
+        <a href="index.html" class="logo">SkillSwap</a>
+        <div class="nav-actions">
+          <button class="theme-toggle" type="button" aria-label="Toggle color theme">
+            <span class="theme-toggle__icon">☀️</span>
+          </button>
+          <a href="dashboard.html" class="btn btn-sm">Dashboard</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container page-shell">
+      <section class="skill-detail-grid">
+        <article class="detail-card" id="skill-detail"></article>
+        <article class="lesson-card">
+          <h3>Course modules</h3>
+          <div id="lesson-list" class="lesson-list"></div>
+          <textarea class="notes-box" id="notes-box" rows="5" placeholder="Write notes for this skill..."></textarea>
+          <div class="detail-actions">
+            <button class="btn" id="complete-lesson" type="button">Mark lesson as completed</button>
+            <button class="btn btn-secondary" id="continue-learning" type="button">Continue learning</button>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>

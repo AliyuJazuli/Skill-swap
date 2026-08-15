@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkillSwap | Find a Skill Swap</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="navbar container">
+        <a href="index.html" class="logo">SkillSwap</a>
+        <div class="nav-actions">
+          <button class="theme-toggle" type="button" aria-label="Toggle color theme"><span class="theme-toggle__icon">☀️</span></button>
+          <a href="dashboard.html" class="btn btn-sm">Dashboard</a>
+        </div>
+      </nav>
+    </header>
+    <main class="container page-shell">
+      <section class="page-hero">
+        <p class="eyebrow">Peer-to-peer learning</p>
+        <h1>Trade knowledge, not money.</h1>
+        <p>Choose what you want to learn and what you can share. Send a clear request, agree on a session, and mark it complete together.</p>
+      </section>
+      <section class="swap-builder">
+        <form id="swap-form" class="contact-form">
+          <div class="form-row">
+            <label>I want to learn<select name="learnSkill" id="swap-learn" required></select></label>
+            <label>I can teach<select name="teachSkill" id="swap-teach" required></select></label>
+          </div>
+          <label>Message to your match<textarea name="message" rows="3" maxlength="280" placeholder="Mention your level, availability, and what you hope to practise."></textarea></label>
+          <button class="btn" type="submit">Find matching students</button>
+          <p id="swap-status" class="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+      <section class="section swap-section">
+        <div class="section-heading"><p class="eyebrow">Recommended matches</p><h2>Students ready to exchange</h2></div>
+        <div id="swap-matches" class="skills-grid"></div>
+      </section>
+      <section class="swap-section">
+        <div class="section-heading"><p class="eyebrow">Your requests</p><h2>Keep every exchange clear</h2></div>
+        <div id="swap-requests" class="swap-request-list"></div>
+      </section>
+    </main>
+    <script src="js/script.js"></script>
+  </body>
+</html>

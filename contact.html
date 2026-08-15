@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkillSwap | Contact</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="navbar container">
+        <a href="index.html" class="logo">SkillSwap</a>
+
+        <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="browse.html">Browse Skills</a></li>
+         
+          <li><a href="saved-skills.html">Saved Skills</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html" class="active">Contact</a></li>
+          <li><a href="login.html" data-auth="login">Login</a></li>
+          <li><a href="signup.html" data-auth="signup">Sign Up</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <button class="theme-toggle" type="button" aria-label="Toggle color theme">
+            <span class="theme-toggle__icon">☀️</span>
+          </button>
+          <a href="contact.html" class="btn btn-sm">Join Now</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container page-shell">
+      <section class="page-hero">
+        <p class="eyebrow">Contact us</p>
+        <h1>We’d love to hear from you.</h1>
+        <p>Send us a message about joining SkillSwap, sharing a skill, or building a campus group.</p>
+      </section>
+
+      <section class="contact-grid">
+        <div class="contact-card">
+          <h3>Reach out</h3>
+          <p><strong>Email:</strong> aliyujaxuli@gmail.com</p>
+          <p><strong>Phone:</strong> +234-8081027298</p>
+          <p><strong>Phone:</strong> +234-9060392028</p>
+          <p><strong>Hours:</strong> Mon–Fri, 9am–6pm</p>
+          <p><strong>Campus:</strong> Online + university partner events</p>
+        </div>
+
+        <form class="contact-form" novalidate>
+          <div class="form-row">
+            <label>
+              Full name
+              <input type="text" name="name" placeholder="yourname surname" required />
+            </label>
+            <label>
+              Email
+              <input type="email" name="email" placeholder="you@example.com" required />
+            </label>
+          </div>
+          <label>
+            Subject
+            <input type="text" name="subject" placeholder="I want to join SkillSwap" required />
+          </label>
+          <label>
+            Message
+            <textarea name="message" rows="5" placeholder="Tell us a little about yourself..." required></textarea>
+          </label>
+          <button class="btn" type="submit">Send Message</button>
+          <p class="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="section section-alt">
+        <div class="section-heading">
+          <p class="eyebrow">Frequently asked questions</p>
+          <h2>Everything you need to know before joining.</h2>
+        </div>
+
+        <div class="faq-list">
+          <details open>
+            <summary>Is SkillSwap really free?</summary>
+            <p>Yes. The platform is built to support mutual learning without financial barriers.</p>
+          </details>
+          <details>
+            <summary>Can I join if I’m just starting out?</summary>
+            <p>Absolutely. Many members join to share beginner-level skills or to learn from others.</p>
+          </details>
+          <details>
+            <summary>Do I need to be a university student?</summary>
+            <p>Yes. SkillSwap is designed primarily for university students and campus communities.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <div class="container cta-box">
+          <h2>Let’s build a stronger student community together.</h2>
+          <a href="browse.html" class="btn">Explore Skills</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <p>© 2026 SkillSwap. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="browse.html">Browse</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>

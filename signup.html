@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkillSwap | Sign Up</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="navbar container">
+        <a href="index.html" class="logo">SkillSwap</a>
+        <div class="nav-actions">
+          <button class="theme-toggle" type="button" aria-label="Toggle color theme">
+            <span class="theme-toggle__icon">☀️</span>
+          </button>
+          <a href="login.html" class="btn btn-sm">Login</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container page-shell auth-shell">
+      <section class="auth-card">
+        <p class="eyebrow">Join the community</p>
+        <h1>Create your SkillSwap account</h1>
+        <form class="contact-form auth-form" id="signup-form">
+          <label>
+            Full name
+            <input type="text" name="name" placeholder="yourname surname" required />
+          </label>
+          <label>
+            Email
+            <input type="email" name="email" placeholder="you@example.com" required />
+          </label>
+          <label>
+            Password
+            <input type="password" name="password" placeholder="At least 6 characters" required />
+          </label>
+          <label>
+            Bio
+            <textarea name="bio" rows="3" placeholder="Tell others what you want to learn or share"></textarea>
+          </label>
+          <label>
+            I want to learn
+            <input type="text" name="learnGoals" placeholder="HTML, CSS, Python, UI/UX" />
+          </label>
+          <label>
+            I can teach
+            <input type="text" name="teachGoals" placeholder="JavaScript, Public Speaking, Mathematics" />
+          </label>
+          <label>
+            Role
+            <select name="role">
+              <option value="Learner">Learner</option>
+              <option value="Teacher">Teacher</option>
+              <option value="Both">Both</option>
+            </select>
+          </label>
+          <button class="btn" type="submit">Create account</button>
+          <p class="form-status" id="signup-status" role="status" aria-live="polite"></p>
+        </form>
+        <p class="auth-link">Already have an account? <a href="login.html">Login</a></p>
+      </section>
+    </main>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
