@@ -1,128 +1,180 @@
-import { STORAGE_KEYS } from './data.js';
+// Local storage keys (defined locally to avoid module dependency)
+const STORAGE_KEYS = {
+  USER: "skillswap_user",
+  PROGRESS: "skillswap_progress",
+  TIME: "skillswap_time",
+  SAVED: "skillswap_saved",
+  RECENT: "skillswap_recent",
+  BOOKMARKS: "skillswap_bookmarks",
+  PROFILE: "skillswap_profile"
+};
 
-export function readStorage(key, fallback) {
+// Safe localStorage wrappers
+function readStorage(key, fallback) {
   try {
     const value = localStorage.getItem(key);
-    return value ? JSON.parse(value) : fallback;
-  } catch (error) {
+    return value === null ? fallback : JSON.parse(value);
+  } catch (e) {
+    console.warn(`Failed to read ${key} from localStorage`, e);
     return fallback;
   }
 }
 
-export function writeStorage(key, value) {
-  localStorage.setItem(key, JSON.stringify(value));
-}
-
-export function getCurrentUser() {
-  return readStorage(STORAGE_KEYS.currentUser, null);
-}
-
-export function saveCurrentUser(user) {
-  writeStorage(STORAGE_KEYS.currentUser, user);
-}
-
-export function getUsers() {
-  return readStorage(STORAGE_KEYS.users, []);
-}
-
-export function saveUsers(users) {
-  writeStorage(STORAGE_KEYS.users, users);
-}
-
-export function getSavedSkills() {
-  return readStorage(STORAGE_KEYS.savedSkills, []);
-}
-
-export function saveSavedSkills(skills) {
-  writeStorage(STORAGE_KEYS.savedSkills, skills);
-}
-
-export function getSkillProgressMap() {
-  return readStorage(STORAGE_KEYS.progress, {});
-}
-
-export function saveSkillProgressMap(value) {
-  writeStorage(STORAGE_KEYS.progress, value);
-}
-
-export function getSkillProgress(skillId) {
-  const progressMap = getSkillProgressMap();
-  return progressMap[skillId] || { completedLessons: [], activeLesson: "", notes: "" };
-}
-
-export function saveSkillProgress(skillId, updates) {
-  const progressMap = getSkillProgressMap();
-  const current = getSkillProgress(skillId);
-  const timestamp = Date.now();
-  progressMap[skillId] = { ...current, ...updates, lastUpdated: timestamp };
-  saveSkillProgressMap(progressMap);
-  return progressMap[skillId];
-}
-
-export function addTimeSpent(skillId, seconds) {
-  const map = readStorage(STORAGE_KEYS.timeSpent, {});
-  map[skillId] = (map[skillId] || 0) + seconds;
-  writeStorage(STORAGE_KEYS.timeSpent, map);
-}
-
-export function getLearningStreak() {
-  const progressMap = getSkillProgressMap();
-  const days = new Set();
-  Object.values(progressMap).forEach((entry) => {
-    if (entry.lastUpdated) days.add(formatDateKey(entry.lastUpdated));
-  });
-  let streak = 0;
-  const today = new Date();
-  for (let i = 0; i < 30; i++) {
-    const check = new Date(today);
-    check.setDate(today.getDate() - i);
-    const key = formatDateKey(check.getTime());
-    if (days.has(key)) streak++; else break;
+function writeStorage(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch (e) {
+    console.warn(`Failed to write ${key} to localStorage`, e);
+    return false;
   }
-  return streak;
 }
 
-function formatDateKey(ms) {
-  const d = new Date(ms);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+// Time spent helper - increments time for a specific skill
+function addTimeSpent(skillId, seconds) {
+  if (typeof seconds !== "number" || seconds < 0 || !skillId) {
+    return;
+  }
+  const all = readStorage(STORAGE_KEYS.TIME, {});
+  const prev = typeof all[skillId] === "number" ? all[skillId] : 0;
+  all[skillId] = prev + seconds;
+  writeStorage(STORAGE_KEYS.TIME, all);
 }
 
-export function getSavedLessons() {
-  return readStorage(STORAGE_KEYS.savedLessons, []);
+// Get total time spent across all skills (returns minutes)
+function getTotalTimeSpentMinutes() {
+  const all = readStorage(STORAGE_KEYS.TIME, {});
+  let totalSeconds = 0;
+  for (const key in all) {
+    if (typeof all[key] === "number") totalSeconds += all[key];
+  }
+  return Math.floor(totalSeconds / 60);
 }
 
-export function saveSavedLessons(list) {
-  writeStorage(STORAGE_KEYS.savedLessons, list);
+// Get time spent on a specific skill (returns minutes)
+function getSkillTimeMinutes(skillId) {
+  const all = readStorage(STORAGE_KEYS.TIME, {});
+  const seconds = typeof all[skillId] === "number" ? all[skillId] : 0;
+  return Math.floor(seconds / 60);
 }
 
-export function toggleLessonBookmark(skillId, lessonTitle) {
-  const key = `${skillId}::${lessonTitle}`;
-  const saved = getSavedLessons();
-  const idx = saved.indexOf(key);
+// --- Skill progress tracking ---
+function getSkillProgressMap() {
+  return readStorage(STORAGE_KEYS.PROGRESS, {});
+}
+
+function saveSkillProgress(skillId, progress) {
+  const all = getSkillProgressMap();
+  all[skillId] = progress;
+  writeStorage(STORAGE_KEYS.PROGRESS, all);
+}
+
+function getSkillProgress(skillId) {
+  const all = getSkillProgressMap();
+  return all[skillId] || {
+    completedLessons: [],
+    activeLesson: null,
+    startedAt: null,
+    completedAt: null
+  };
+}
+
+// --- Bookmarks ---
+function toggleLessonBookmark(skillId, lessonId) {
+  const all = readStorage(STORAGE_KEYS.BOOKMARKS, {});
+  const list = Array.isArray(all[skillId]) ? all[skillId] : [];
+  const idx = list.indexOf(lessonId);
   if (idx >= 0) {
-    saved.splice(idx, 1);
+    list.splice(idx, 1);
   } else {
-    saved.push(key);
+    list.push(lessonId);
   }
-  saveSavedLessons(saved);
-  return idx < 0;
+  all[skillId] = list;
+  writeStorage(STORAGE_KEYS.BOOKMARKS, all);
+  return list.includes(lessonId);
 }
 
-export function isLessonBookmarked(skillId, lessonTitle) {
-  const key = `${skillId}::${lessonTitle}`;
-  return getSavedLessons().includes(key);
+function isLessonBookmarked(skillId, lessonId) {
+  const all = readStorage(STORAGE_KEYS.BOOKMARKS, {});
+  return Array.isArray(all[skillId]) && all[skillId].includes(lessonId);
 }
 
-export function getRecentlyViewed() {
-  return readStorage(STORAGE_KEYS.recentSkills, []);
+// --- Recently viewed ---
+function getRecentlyViewed() {
+  return readStorage(STORAGE_KEYS.RECENT, []);
 }
 
-export function saveRecentlyViewed(skills) {
-  writeStorage(STORAGE_KEYS.recentSkills, skills);
+function saveRecentlyViewed(list) {
+  writeStorage(STORAGE_KEYS.RECENT, list);
 }
 
-export function addRecentlyViewed(skillId) {
-  const recent = getRecentlyViewed().filter((id) => id !== skillId);
-  recent.unshift(skillId);
-  saveRecentlyViewed(recent.slice(0, 4));
+function addRecentlyViewed(skillId) {
+  if (!skillId) return;
+  const list = getRecentlyViewed().filter((id) => id !== skillId);
+  list.unshift(skillId);
+  if (list.length > 10) list.length = 10;
+  saveRecentlyViewed(list);
 }
+
+// --- Saved skills ---
+function getSavedLessons() {
+  return readStorage(STORAGE_KEYS.SAVED, []);
+}
+
+function saveSavedLessons(list) {
+  writeStorage(STORAGE_KEYS.SAVED, list);
+}
+
+function isSkillSaved(skillId) {
+  return getSavedLessons().includes(skillId);
+}
+
+function toggleSkillSaved(skillId) {
+  const list = getSavedLessons();
+  const idx = list.indexOf(skillId);
+  if (idx >= 0) {
+    list.splice(idx, 1);
+  } else {
+    list.push(skillId);
+  }
+  saveSavedLessons(list);
+  return list.includes(skillId);
+}
+
+// --- Auth state helpers ---
+function getCurrentUser() {
+  return readStorage(STORAGE_KEYS.USER, null);
+}
+
+function isLoggedIn() {
+  return !!getCurrentUser();
+}
+
+function logout() {
+  localStorage.removeItem(STORAGE_KEYS.USER);
+}
+
+// Expose to window so other scripts can use these
+window.SkillswapUtils = {
+  STORAGE_KEYS,
+  readStorage,
+  writeStorage,
+  addTimeSpent,
+  getTotalTimeSpentMinutes,
+  getSkillTimeMinutes,
+  getSkillProgressMap,
+  saveSkillProgress,
+  getSkillProgress,
+  toggleLessonBookmark,
+  isLessonBookmarked,
+  getRecentlyViewed,
+  saveRecentlyViewed,
+  addRecentlyViewed,
+  getSavedLessons,
+  saveSavedLessons,
+  isSkillSaved,
+  toggleSkillSaved,
+  getCurrentUser,
+  isLoggedIn,
+  logout
+};

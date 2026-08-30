@@ -1005,6 +1005,10 @@ function normalizeSkill(skill) {
   return skill;
 }
 
+/**
+ * FIXED: renderLessonContent() - Shows full lesson details for independent learning
+ * Replace the existing renderLessonContent function in script.js with this one
+ */
 function renderLessonContent(skill, lessonTitle) {
   if (lessonRenderer && typeof lessonRenderer.renderLessonContent === "function") {
     return lessonRenderer.renderLessonContent(skill, lessonTitle);
@@ -1014,13 +1018,219 @@ function renderLessonContent(skill, lessonTitle) {
   if (!lessonView) return;
 
   const lessonEntries = getSkillLessonEntries(skill);
-  const lessonEntry = lessonEntries.find((l) => l.title === lessonTitle) || lessonEntries[0] || { title: lessonTitle, description: '' };
+  const lessonIndex = lessonEntries.findIndex((l) => l.title === lessonTitle);
+  const lessonEntry = lessonEntries[lessonIndex] || lessonEntries[0] || { title: lessonTitle };
+
+  // Build quiz options HTML safely
+  let quizHTML = '';
+  if (lessonEntry.quiz && lessonEntry.quiz.options) {
+    quizHTML = `
+      <div class="quiz-block">
+        <p><strong>Quiz:</strong> ${lessonEntry.quiz.q || 'Test your understanding'}</p>
+        <div class="quiz-options">
+          ${(lessonEntry.quiz.options || []).map((opt, i) =>
+            `<button class="btn btn-secondary quiz-opt" data-index="${i}">${opt}</button>`
+          ).join('')}
+        </div>
+        <p class="quiz-feedback"></p>
+      </div>
+    `;
+  }
+
+  // Build steps HTML
+  let stepsHTML = '';
+  if (lessonEntry.steps && lessonEntry.steps.length) {
+    stepsHTML = `
+      <h4>Steps to Follow</h4>
+      <ol>
+        ${lessonEntry.steps.map(s => `<li>${s}</li>`).join('')}
+      </ol>
+    `;
+  }
+
+  // Build exercises HTML
+  let exercisesHTML = '';
+  if (lessonEntry.exercises && lessonEntry.exercises.length) {
+    exercisesHTML = `
+      <h4>Practice Exercises</h4>
+      <ul>
+        ${lessonEntry.exercises.map(e => `<li>${e}</li>`).join('')}
+      </ul>
+    `;
+  }
+
+  // Build common mistakes HTML
+  let mistakesHTML = '';
+  if (lessonEntry.commonMistakes && lessonEntry.commonMistakes.length) {
+    mistakesHTML = `
+      <h4>Common Mistakes to Avoid</h4>
+      <ul>
+        ${lessonEntry.commonMistakes.map(m => `<li>${m}</li>`).join('')}
+      </ul>
+    `;
+  }
+
+  // Previous/Next navigation
+  const prevLesson = lessonIndex > 0 ? lessonEntries[lessonIndex - 1] : null;
+  const nextLesson = lessonIndex < lessonEntries.length - 1 ? lessonEntries[lessonIndex + 1] : null;
+
+  // Progress tracking
+  const progress = getSkillProgress(skill.id);
+  const completedCount = progress.completedLessons?.length || 0;
+  const totalCount = lessonEntries.length;
+  const progressPercent = Math.round((completedCount / totalCount) * 100);
+
   lessonView.innerHTML = `
-    <article class="lesson-view-card">
-      <h3>${lessonEntry.title}</h3>
+    <article class="lesson-view-card lesson-full-content">
+      <!-- Header -->
+      <div class="lesson-header">
+        <span class="lesson-level-badge">${progressPercent}% Complete</span>
+        <button class="btn btn-secondary btn-small bookmark-btn" data-lesson="${lessonTitle}" type="button">
+          ${isLessonBookmarked(skill.id, lessonTitle) ? 'Saved' : 'Save Lesson'}
+        </button>
+      </div>
+
+      <!-- Title & Description -->
+      <h2>${lessonEntry.title}</h2>
       <p class="lesson-desc">${lessonEntry.description || ''}</p>
+
+      <!-- Introduction -->
+      ${lessonEntry.introduction ? `<div class="lesson-section"><h4>Introduction</h4><p>${lessonEntry.introduction}</p></div>` : ''}
+
+      <!-- Why Learn This -->
+      ${lessonEntry.why ? `<div class="lesson-section"><h4>Why This Matters</h4><p>${lessonEntry.why}</p></div>` : ''}
+
+      <!-- Simple Explanation -->
+      ${lessonEntry.simpleExplanation ? `<div class="lesson-section"><h4>Simple Explanation</h4><p>${lessonEntry.simpleExplanation}</p></div>` : ''}
+
+      <!-- Analogy -->
+      ${lessonEntry.analogy ? `<div class="lesson-section lesson-analogy"><h4>Think of it like this</h4><p>${lessonEntry.analogy}</p></div>` : ''}
+
+      <!-- Visual/Code Example -->
+      ${lessonEntry.visual ? `<div class="lesson-section"><h4>Visual Example</h4><pre class="visual-code">${lessonEntry.visual}</pre></div>` : ''}
+
+      <!-- Detailed Explanation -->
+      ${lessonEntry.explanation ? `<div class="lesson-section"><h4>How It Works</h4><p>${lessonEntry.explanation}</p></div>` : ''}
+
+      <!-- Examples -->
+      ${lessonEntry.examples ? `<div class="lesson-section"><h4>Examples</h4><p>${lessonEntry.examples}</p></div>` : ''}
+
+      <!-- Steps -->
+      ${stepsHTML}
+
+      <!-- Exercises -->
+      ${exercisesHTML}
+
+      <!-- Common Mistakes -->
+      ${mistakesHTML}
+
+      <!-- Mini Project -->
+      ${lessonEntry.miniProject ? `<div class="lesson-section lesson-project"><h4>Mini Project</h4><p>${lessonEntry.miniProject}</p></div>` : ''}
+
+      <!-- Summary -->
+      ${lessonEntry.summary ? `<div class="lesson-section lesson-summary"><h4>Summary</h4><p>${lessonEntry.summary}</p></div>` : ''}
+
+      <!-- Memory Aid -->
+      ${lessonEntry.memoryAid ? `<div class="lesson-section lesson-tip"><strong>Memory Tip:</strong> ${lessonEntry.memoryAid}</div>` : ''}
+
+      <!-- Interactive -->
+      ${lessonEntry.interactive ? `<div class="lesson-section lesson-interactive"><strong>Try it now:</strong> ${lessonEntry.interactive}</div>` : ''}
+
+      <!-- Quiz -->
+      ${quizHTML}
+
+      <!-- Revision -->
+      ${lessonEntry.revision ? `<div class="lesson-section lesson-revision"><strong>Quick Review:</strong> ${lessonEntry.revision}</div>` : ''}
+
+      <!-- Navigation -->
+      <div class="lesson-nav">
+        ${prevLesson
+          ? `<button class="btn btn-secondary prev-lesson-btn" data-lesson="${prevLesson.title}" type="button">← ${prevLesson.title}</button>`
+          : `<span class="lesson-nav-placeholder"></span>`
+        }
+        ${nextLesson
+          ? `<button class="btn next-lesson-btn" data-lesson="${nextLesson.title}" type="button">${nextLesson.title} →</button>`
+          : `<span class="lesson-nav-placeholder"></span>`
+        }
+      </div>
+
+      <!-- Mark Complete Button -->
+      <div class="lesson-complete-section">
+        <button class="btn complete-lesson-btn" data-lesson="${lessonTitle}" type="button">
+          ${progress.completedLessons?.includes(lessonTitle) ? '✓ Completed' : 'Mark as Complete'}
+        </button>
+      </div>
     </article>
   `;
+
+  // Attach event listeners
+
+  // Quiz functionality
+  lessonView.querySelectorAll('.quiz-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.index, 10);
+      const correct = lessonEntry.quiz?.answer;
+      const feedback = lessonView.querySelector('.quiz-feedback');
+
+      lessonView.querySelectorAll('.quiz-opt').forEach(b => {
+        b.classList.remove('is-correct', 'is-wrong');
+        b.disabled = true;
+      });
+
+      if (idx === correct) {
+        btn.classList.add('is-correct');
+        if (feedback) feedback.textContent = '✓ Correct! Well done.';
+      } else {
+        btn.classList.add('is-wrong');
+        const correctBtn = lessonView.querySelector(`.quiz-opt[data-index="${correct}"]`);
+        if (correctBtn) correctBtn.classList.add('is-correct');
+        if (feedback) feedback.textContent = `✗ Not quite. The correct answer is highlighted above.`;
+      }
+    });
+  });
+
+  // Bookmark toggle
+  lessonView.querySelector('.bookmark-btn')?.addEventListener('click', () => {
+    const isSaved = toggleLessonBookmark(skill.id, lessonTitle);
+    const bookmarkBtn = lessonView.querySelector('.bookmark-btn');
+    if (bookmarkBtn) bookmarkBtn.textContent = isSaved ? 'Saved' : 'Save Lesson';
+  });
+
+  // Previous lesson
+  lessonView.querySelector('.prev-lesson-btn')?.addEventListener('click', (e) => {
+    const title = e.target.dataset.lesson;
+    saveSkillProgress(skill.id, { activeLesson: title });
+    renderLessonContent(skill, title);
+    renderSkillDetailPage();
+  });
+
+  // Next lesson
+  lessonView.querySelector('.next-lesson-btn')?.addEventListener('click', (e) => {
+    const title = e.target.dataset.lesson;
+    saveSkillProgress(skill.id, { activeLesson: title });
+    renderLessonContent(skill, title);
+    renderSkillDetailPage();
+  });
+
+  // Complete lesson
+  lessonView.querySelector('.complete-lesson-btn')?.addEventListener('click', () => {
+    const updated = getSkillProgress(skill.id);
+    const completedLessons = updated.completedLessons || [];
+    if (!completedLessons.includes(lessonTitle)) {
+      completedLessons.push(lessonTitle);
+    }
+    saveSkillProgress(skill.id, { completedLessons });
+
+    const completeBtn = lessonView.querySelector('.complete-lesson-btn');
+    if (completeBtn) completeBtn.textContent = '✓ Completed';
+
+    const levelBadge = lessonView.querySelector('.lesson-level-badge');
+    if (levelBadge) {
+      const newProgress = getSkillProgress(skill.id);
+      const newCompleted = newProgress.completedLessons?.length || 0;
+      levelBadge.textContent = Math.round((newCompleted / totalCount) * 100) + '% Complete';
+    }
+  });
 }
 
 function defaultCodeFor(skillId, lessonTitle) {
@@ -1196,18 +1406,114 @@ function getSkillProgressPercent(skillId) {
   return Math.round((completedCount / skill.lessons.length) * 100);
 }
 
+/**
+ * FIXED: updateAuthLinks() - Properly hides login/signup when user is logged in
+ * Replace the existing updateAuthLinks function in script.js with this one
+ */
 function updateAuthLinks() {
   const currentUser = getCurrentUser();
-  const loginLinks = document.querySelectorAll('[data-auth="login"]');
-  const signupLinks = document.querySelectorAll('[data-auth="signup"]');
+  const isLoggedIn = !!currentUser;
 
-  loginLinks.forEach((link) => {
-    link.textContent = currentUser ? "Dashboard" : "Login";
-    link.href = currentUser ? "dashboard.html" : "login.html";
+  // Handle all auth-related elements by data attribute
+  const loginElements = document.querySelectorAll('[data-auth="login"]');
+  const signupElements = document.querySelectorAll('[data-auth="signup"]');
+  const logoutElements = document.querySelectorAll('[data-auth="logout"]');
+  const profileElements = document.querySelectorAll('[data-auth="profile"]');
+  const dashboardElements = document.querySelectorAll('[data-auth="dashboard"]');
+  const authOnlyElements = document.querySelectorAll('[data-auth="auth-only"]');
+  const guestOnlyElements = document.querySelectorAll('[data-auth="guest-only"]');
+
+  // Login links
+  loginElements.forEach(link => {
+    if (isLoggedIn) {
+      link.textContent = 'Dashboard';
+      link.href = 'dashboard.html';
+      link.style.display = '';
+    } else {
+      link.textContent = 'Login';
+      link.href = 'login.html';
+      link.style.display = '';
+    }
   });
 
-  signupLinks.forEach((link) => {
-    link.style.display = currentUser ? "none" : "inline-flex";
+  // Signup links - HIDE when logged in
+  signupElements.forEach(link => {
+    link.style.display = isLoggedIn ? 'none' : '';
+  });
+
+  // Logout links - SHOW when logged in
+  logoutElements.forEach(link => {
+    link.style.display = isLoggedIn ? '' : 'none';
+  });
+
+  // Profile links - SHOW when logged in
+  profileElements.forEach(link => {
+    link.style.display = isLoggedIn ? '' : 'none';
+    if (isLoggedIn && currentUser) {
+      link.textContent = currentUser.name || 'Profile';
+    }
+  });
+
+  // Dashboard links - SHOW when logged in
+  dashboardElements.forEach(link => {
+    link.style.display = isLoggedIn ? '' : 'none';
+  });
+
+  // Auth-only elements (login/signup page elements) - HIDE when logged in
+  authOnlyElements.forEach(el => {
+    el.style.display = isLoggedIn ? 'none' : '';
+  });
+
+  // Guest-only elements (pages only guests should see) - HIDE when logged in
+  guestOnlyElements.forEach(el => {
+    el.style.display = isLoggedIn ? 'none' : '';
+  });
+
+  // Also update the nav-actions area in index.html (the "Join Now" button area)
+  const navActions = document.querySelector('.nav-actions');
+  if (navActions && !isLoggedIn) {
+    // Ensure login and signup links exist in nav for guests
+    if (!navActions.querySelector('[data-auth="login"]')) {
+      // Add login link if missing and user is guest
+      const loginLink = document.createElement('a');
+      loginLink.href = 'login.html';
+      loginLink.className = 'btn btn-sm';
+      loginLink.setAttribute('data-auth', 'login');
+      loginLink.textContent = 'Login';
+      navActions.insertBefore(loginLink, navActions.firstChild);
+    }
+    if (!navActions.querySelector('[data-auth="signup"]')) {
+      // Add signup link if missing and user is guest
+      const signupLink = document.createElement('a');
+      signupLink.href = 'signup.html';
+      signupLink.className = 'btn btn-sm';
+      signupLink.setAttribute('data-auth', 'signup');
+      signupLink.textContent = 'Sign Up';
+      navActions.insertBefore(signupLink, navActions.querySelector('[data-auth="login"]')?.nextSibling || null);
+    }
+  } else if (navActions && isLoggedIn) {
+    // Remove dynamically added login/signup links when logged in
+    navActions.querySelectorAll('[data-dynamic-auth]').forEach(el => el.remove());
+  }
+
+  // Update breadcrumb if it exists
+  const breadcrumb = document.querySelector('.breadcrumb-user');
+  if (breadcrumb) {
+    breadcrumb.style.display = isLoggedIn ? '' : 'none';
+    const breadcrumbText = breadcrumb.querySelector('.user-name');
+    if (breadcrumbText && currentUser) {
+      breadcrumbText.textContent = currentUser.name || 'User';
+    }
+  }
+
+  // Update any "logged in as" text
+  document.querySelectorAll('.logged-in-name').forEach(el => {
+    if (isLoggedIn && currentUser) {
+      el.textContent = currentUser.name || 'User';
+      el.style.display = '';
+    } else {
+      el.style.display = 'none';
+    }
   });
 }
 
