@@ -1,7 +1,7 @@
 :root {
-  --primary: #6d28d9;
-  --primary-dark: #4c1d95;
-  --primary-soft: #ede9fe;
+  --primary: #1ea1b5;
+  --primary-dark: #2ca5b8;
+  --primary-soft: #e9fbfe;
   --bg: #f5f7fb;
   --surface: #ffffff;
   --surface-2: #f8f6ff;
@@ -12,8 +12,8 @@
 }
 
 body.dark {
-  --primary: #a78bfa;
-  --primary-dark: #c4b5fd;
+  --primary: #1ea1b5;
+  --primary-dark: #2ca5b8;
   --primary-soft: rgba(167, 139, 250, 0.14);
   --bg: #07111f;
   --surface: #0f172a;
