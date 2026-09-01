@@ -781,6 +781,7 @@ const {
 } = skillEngine || {};
 
 let lessonRenderer = null;
+let lessonParamApplied = false;
 
 // Every listed topic is a learnable course.  The richer hand-written courses above
 // remain intact; these course blueprints complete the community catalogue.
@@ -1994,9 +1995,13 @@ function renderSkillDetailPage() {
     });
   }
 
-  // If a lesson query param is present, open that lesson immediately
+  // If a lesson query param is present, open that lesson immediately.
+  // Only do this once (on first load) — otherwise every re-render (e.g.
+  // after clicking Next Lesson) would re-read the same stale URL param
+  // and snap the view back to it, undoing in-page navigation.
   const lessonParam = params.get('lesson');
-  if (lessonParam) {
+  if (lessonParam && !lessonParamApplied) {
+    lessonParamApplied = true;
     saveSkillProgress(skill.id, { activeLesson: lessonParam });
     renderLessonContent(skill, lessonParam);
   } else if (progress.activeLesson) {

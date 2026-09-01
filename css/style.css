@@ -501,8 +501,9 @@ body.dark .site-header {
 }
 
 .skill-search {
-  flex: 1 1 260px;
-  padding: 0.95rem 1rem;
+  flex: 0 1 340px;
+  max-width: 420px;
+  padding: 0.75rem 1.1rem;
   border-radius: 999px;
   border: 1px solid var(--border);
   outline: none;
@@ -547,6 +548,16 @@ body.dark .site-header {
   align-items: center;
   gap: 0.8rem;
   margin-bottom: 0.6rem;
+}
+
+.skill-card__top h3 {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.skill-card__top .pill,
+.skill-card__top .status-pill {
+  flex-shrink: 0;
 }
 
 .pill {
@@ -1129,14 +1140,14 @@ body {
   padding-bottom: 30px; /* Space for fixed nav bar */
 }
 
-/* Make main content centered */
-main {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-/* Ensure containers center properly */
+/* NOTE: removed a blanket `main { max-width: 1120px; margin: 0 auto;
+   padding: 0 1rem; }` rule that used to live here — it was capping the
+   width of every <main>, including on pages like index.html where
+   full-bleed sections (e.g. .hero) sit directly inside <main> with no
+   .container of their own. That's what kept the hero background from
+   reaching the left/right edges. Pages that need centered content
+   already get it from .container / .page-shell / the *-content
+   classes below, applied directly to the element that needs it. */
 .container {
   width: min(1120px, calc(100% - 2rem));
   margin: 0 auto;
@@ -1192,6 +1203,17 @@ body.dark .page-nav {
 .quick-nav__link.active {
   background: var(--primary-soft);
   color: var(--primary);
+}
+
+/* .quick-nav is position:fixed, so it's removed from normal document
+   flow and nothing reserves space for it — whatever follows it in the
+   page starts right underneath and gets covered. This does NOT touch
+   the nav bar itself; it only pushes the content that comes after it
+   down far enough to clear it (sticky header + quick-nav's own
+   height). Only applies on pages that actually contain a .quick-nav. */
+body:has(.quick-nav) .page-shell,
+body:has(.quick-nav) main {
+  padding-top: 9.5rem;
 }
 
 /* Mobile: scrollable on small screens */
