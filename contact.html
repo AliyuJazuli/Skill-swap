@@ -23,85 +23,47 @@
           <span></span>
         </button>
 
-        
-
         <div class="nav-actions">
           <button class="theme-toggle" type="button" aria-label="Toggle color theme">
             <span class="theme-toggle__icon">☀️</span>
           </button>
-          <a href="contact.html" class="btn btn-sm">Join Now</a>
+          <a href="login.html" class="btn btn-sm" data-auth="login">Login</a>
+          <a href="signup.html" class="btn btn-sm" data-auth="signup">Sign Up</a>
         </div>
       </nav>
     </header>
 
     <main class="container page-shell">
       <section class="page-hero">
-        <p class="eyebrow">Contact us</p>
-        <h1>We’d love to hear from you.</h1>
-        <p>Send us a message about joining SkillSwap, sharing a skill, or building a campus group.</p>
+        <p class="eyebrow">Get in touch</p>
+        <h1>Have a question, idea, or issue to report?</h1>
+        <p>
+          Send us a message below and it'll open right in your email app, addressed to us — no account or extra
+          sign-up needed.
+        </p>
       </section>
 
-      <section class="contact-grid">
-        <div class="contact-card">
-          <h3>Reach out</h3>
-          <p><strong>Email:</strong> aliyujaxuli@gmail.com</p>
-          <p><strong>Phone:</strong> +234-8081027298</p>
-          <p><strong>Phone:</strong> +234-9060392028</p>
-          <p><strong>Hours:</strong> Mon–Fri, 9am–6pm</p>
-          <p><strong>Campus:</strong> Online + university partner events</p>
-        </div>
+      <section class="search-panel" style="max-width: 640px; margin: 0 auto;">
+        <form class="contact-form">
+          <label for="contact-name">Name
+            <input type="text" id="contact-name" name="name" required autocomplete="name" />
+          </label>
 
-        <form class="contact-form" novalidate>
-          <div class="form-row">
-            <label>
-              Full name
-              <input type="text" name="name" placeholder="yourname surname" required />
-            </label>
-            <label>
-              Email
-              <input type="email" name="email" placeholder="you@example.com" required />
-            </label>
-          </div>
-          <label>
-            Subject
-            <input type="text" name="subject" placeholder="I want to join SkillSwap" required />
+          <label for="contact-email">Email
+            <input type="email" id="contact-email" name="email" required autocomplete="email" />
           </label>
-          <label>
-            Message
-            <textarea name="message" rows="5" placeholder="Tell us a little about yourself..." required></textarea>
+
+          <label for="contact-subject">Subject
+            <input type="text" id="contact-subject" name="subject" required />
           </label>
-          <button class="btn" type="submit">Send Message</button>
+
+          <label for="contact-message">Message
+            <textarea id="contact-message" name="message" rows="6" required></textarea>
+          </label>
+
+          <button type="submit" class="btn">Send message</button>
           <p class="form-status" role="status" aria-live="polite"></p>
         </form>
-      </section>
-
-      <section class="section section-alt">
-        <div class="section-heading">
-          <p class="eyebrow">Frequently asked questions</p>
-          <h2>Everything you need to know before joining.</h2>
-        </div>
-
-        <div class="faq-list">
-          <details open>
-            <summary>Is SkillSwap really free?</summary>
-            <p>Yes. The platform is built to support mutual learning without financial barriers.</p>
-          </details>
-          <details>
-            <summary>Can I join if I’m just starting out?</summary>
-            <p>Absolutely. Many members join to share beginner-level skills or to learn from others.</p>
-          </details>
-          <details>
-            <summary>Do I need to be a university student?</summary>
-            <p>Yes. SkillSwap is designed primarily for university students and campus communities.</p>
-          </details>
-        </div>
-      </section>
-
-      <section class="cta-section">
-        <div class="container cta-box">
-          <h2>Let’s build a stronger student community together.</h2>
-          <a href="browse.html" class="btn">Explore Skills</a>
-        </div>
       </section>
     </main>
 
